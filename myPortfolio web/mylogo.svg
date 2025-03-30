@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineer Kipkoech Caleb Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f7fa;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        .logo-container {
+            text-align: center;
+        }
+        .logo-preview {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <h2>Logo Concept for Engineer Kipkoech Caleb</h2>
+        
+        <div class="logo-preview">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+                <!-- Background Circle -->
+                <circle cx="250" cy="250" r="240" fill="#2c5e9e" opacity="0.1"/>
+                
+                <!-- Gear Base -->
+                <path d="M250,100 L270,100 L280,120 L300,110 L310,130 L330,140 L320,160 L340,170 L330,190 L350,200 L330,210 L340,230 L320,240 L330,260 L310,270 L300,290 L280,280 L270,300 L250,300 L230,300 L220,280 L200,290 L190,270 L170,260 L180,240 L160,230 L170,210 L150,200 L170,190 L160,170 L180,160 L170,140 L190,130 L200,110 L220,120 L230,100 Z" 
+                    fill="#2c5e9e" stroke="#1e3f6f" stroke-width="3"/>
+                
+                <!-- Circuit Path -->
+                <path d="M250,150 C300,150 350,200 350,250 C350,300 300,350 250,350 C200,350 150,300 150,250 C150,200 200,150 250,150 Z" 
+                    fill="none" stroke="#4cb944" stroke-width="8" stroke-linecap="round" stroke-dasharray="5,10"/>
+                
+                <!-- Bolt Symbol -->
+                <path d="M250,180 L280,220 L240,230 L270,270 L250,320 L220,280 L260,270 L230,230 Z" 
+                    fill="#ff914d" stroke="#e67e22" stroke-width="2"/>
+                
+                <!-- Text Elements -->
+                <text x="250" y="400" text-anchor="middle" font-family="Poppins" font-size="30" font-weight="600" fill="#2d3436">
+                    Engineer
+                </text>
+                <text x="250" y="440" text-anchor="middle" font-family="Poppins" font-size="36" font-weight="700" fill="#2c5e9e">
+                    Kipkoech Caleb
+                </text>
+                <text x="250" y="480" text-anchor="middle" font-family="Poppins" font-size="20" font-weight="500" fill="#4cb944">
+                    EEE | Embedded Systems
+                </text>
+            </svg>
+        </div>
+        
+        <h3>Color Variants</h3>
+        
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
+            <div>
+                <svg width="150" height="150" viewBox="0 0 500 500">
+                    <circle cx="250" cy="250" r="240" fill="#f8f9fa"/>
+                    <path d="M250,100 L270,100 L280,120 L300,110 L310,130 L330,140 L320,160 L340,170 L330,190 L350,200 L330,210 L340,230 L320,240 L330,260 L310,270 L300,290 L280,280 L270,300 L250,300 L230,300 L220,280 L200,290 L190,270 L170,260 L180,240 L160,230 L170,210 L150,200 L170,190 L160,170 L180,160 L170,140 L190,130 L200,110 L220,120 L230,100 Z" 
+                        fill="#2c5e9e" stroke="#1e3f6f" stroke-width="3"/>
+                    <path d="M250,150 C300,150 350,200 350,250 C350,300 300,350 250,350 C200,350 150,300 150,250 C150,200 200,150 250,150 Z" 
+                        fill="none" stroke="#4cb944" stroke-width="8" stroke-linecap="round" stroke-dasharray="5,10"/>
+                    <path d="M250,180 L280,220 L240,230 L270,270 L250,320 L220,280 L260,270 L230,230 Z" 
+                        fill="#ff914d" stroke="#e67e22" stroke-width="2"/>
+                </svg>
+                <p>Light Background</p>
+            </div>
+            
+            <div>
+                <svg width="150" height="150" viewBox="0 0 500 500">
+                    <circle cx="250" cy="250" r="240" fill="#2d3436"/>
+                    <path d="M250,100 L270,100 L280,120 L300,110 L310,130 L330,140 L320,160 L340,170 L330,190 L350,200 L330,210 L340,230 L320,240 L330,260 L310,270 L300,290 L280,280 L270,300 L250,300 L230,300 L220,280 L200,290 L190,270 L170,260 L180,240 L160,230 L170,210 L150,200 L170,190 L160,170 L180,160 L170,140 L190,130 L200,110 L220,120 L230,100 Z" 
+                        fill="#f8f9fa" stroke="#e4e8f0" stroke-width="3"/>
+                    <path d="M250,150 C300,150 350,200 350,250 C350,300 300,350 250,350 C200,350 150,300 150,250 C150,200 200,150 250,150 Z" 
+                        fill="none" stroke="#4cb944" stroke-width="8" stroke-linecap="round" stroke-dasharray="5,10"/>
+                    <path d="M250,180 L280,220 L240,230 L270,270 L250,320 L220,280 L260,270 L230,230 Z" 
+                        fill="#ff914d" stroke="#e67e22" stroke-width="2"/>
+                </svg>
+                <p>Dark Background</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

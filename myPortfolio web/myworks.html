@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myworks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c5e9e;
+            --primary-dark: #1e3f6f;
+            --secondary: #4cb944;
+            --accent: #ff914d;
+            --dark: #2d3436;
+            --light: #f8f9fa;
+            --glass: rgba(255, 255, 255, 0.15);
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 0;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Interactive Circuit Background */
+        .circuit-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, 
+                    rgba(44, 94, 158, 0.05) 1px, 
+                    transparent 1px), 
+                linear-gradient(rgba(44, 94, 158, 0.05) 1px, 
+                    transparent 1px);
+            background-size: 40px 40px;
+            animation: circuitFlow 60s linear infinite;
+            z-index: -1;
+        }
+
+        /* Project Showcase */
+        .project-showcase {
+            padding: 10rem 0 5rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.5s ease;
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 3D Model Viewer Container */
+        .model-viewer {
+            width: 100%;
+            height: 100%;
+            background: #f0f2f5;
+            position: relative;
+        }
+
+        #pcb-model {
+            width: 100%;
+            height: 500px;
+        }
+
+        /* Interactive Circuit Diagram */
+        .circuit-diagram {
+            width: 100%;
+            height: 400px;
+            background: white;
+            border: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circuit-component {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .circuit-component i {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .circuit-component .label {
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+            font-weight: 600;
+        }
+
+        .circuit-wire {
+            position: absolute;
+            background: #4cb944;
+            height: 3px;
+            transform-origin: left center;
+            z-index: 5;
+        }
+
+        /* IoT Dashboard */
+        .iot-dashboard {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        #power-consumption-chart {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Calculation Tools */
+        .calculator {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .calculator-tool {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        /* Animations */
+        @keyframes circuitFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .project-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Interactive Background -->
+    <div class="circuit-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo"> ECK</div>
+            <nav>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#circuit" class="nav-link">Circuit Designer</a>
+                <a href="#iot" class="nav-link">IoT Dashboard</a>
+                <a href="#calculators" class="nav-link">Calculators</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- 3D PCB Model Viewer -->
+        <section class="container">
+            <h2>Interactive PCB Model</h2>
+            <div class="model-viewer">
+                <div id="pcb-model"></div>
+            </div>
+        </section>
+
+        <!-- Circuit Designer -->
+        <section id="circuit" class="container">
+            <h2>Interactive Circuit Designer</h2>
+            <div class="circuit-diagram" id="circuit-canvas">
+                <!-- Components will be added via JS -->
+            </div>
+            <div class="component-palette">
+                <button class="add-component" data-type="resistor">
+                    <i class="fas fa-bolt"></i> Resistor
+                </button>
+                <button class="add-component" data-type="capacitor">
+                    <i class="fas fa-battery-three-quarters"></i> Capacitor
+                </button>
+                <button class="add-component" data-type="transistor">
+                    <i class="fas fa-microchip"></i> Transistor
+                </button>
+            </div>
+        </section>
+
+        <!-- IoT Dashboard -->
+        <section id="iot" class="container">
+            <h2>Live Power Monitoring</h2>
+            <div class="iot-dashboard">
+                <div id="power-consumption-chart"></div>
+                <div class="sensor-data">
+                    <div class="sensor-card">
+                        <h4>Voltage</h4>
+                        <div class="sensor-value" id="voltage">230.4 V</div>
+                    </div>
+                    <div class="sensor-card">
+                        <h4>Current</h4>
+                        <div class="sensor-value" id="current">15.2 A</div>
+                    </div>
+                    <div class="sensor-card">
+                        <h4>Power</h4>
+                        <div class="sensor-value" id="power">3.5 kW</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Engineering Calculators -->
+        <section id="calculators" class="container">
+            <h2>Engineering Calculators</h2>
+            <div class="calculator">
+                <div class="calculator-grid">
+                    <div class="calculator-tool">
+                        <h3>Ohm's Law Calculator</h3>
+                        <div class="input-group">
+                            <label>Voltage (V)</label>
+                            <input type="number" id="voltage-input" placeholder="Enter volts">
+                        </div>
+                        <div class="input-group">
+                            <label>Current (I)</label>
+                            <input type="number" id="current-input" placeholder="Enter amps">
+                        </div>
+                        <button id="calculate-ohm">Calculate Resistance</button>
+                        <div class="result" id="ohm-result"></div>
+                    </div>
+
+                    <div class="calculator-tool">
+                        <h3>Power Calculator</h3>
+                        <div class="input-group">
+                            <label>Voltage (V)</label>
+                            <input type="number" id="power-voltage" placeholder="Enter volts">
+                        </div>
+                        <div class="input-group">
+                            <label>Current (I)</label>
+                            <input type="number" id="power-current" placeholder="Enter amps">
+                        </div>
+                        <button id="calculate-power">Calculate Power</button>
+                        <div class="result" id="power-result"></div>
+                    </div>
+
+                    <div class="calculator-tool">
+                        <h3>Voltage Divider</h3>
+                        <div class="input-group">
+                            <label>R1 (Ω)</label>
+                            <input type="number" id="r1-input" placeholder="Resistor 1">
+                        </div>
+                        <div class="input-group">
+                            <label>R2 (Ω)</label>
+                            <input type="number" id="r2-input" placeholder="Resistor 2">
+                        </div>
+                        <div class="input-group">
+                            <label>Vin (V)</label>
+                            <input type="number" id="vin-input" placeholder="Input voltage">
+                        </div>
+                        <button id="calculate-divider">Calculate Vout</button>
+                        <div class="result" id="divider-result"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize 3D PCB Model
+        function initPCBModel() {
+            const container = document.getElementById('pcb-model');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // PCB Geometry
+            const pcbGeometry = new THREE.BoxGeometry(5, 3, 0.2);
+            const pcbMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0x006600,
+                wireframe: false
+            });
+            const pcb = new THREE.Mesh(pcbGeometry, pcbMaterial);
+            scene.add(pcb);
+            
+            // Components
+            const components = [
+                { pos: [1, 1, 0.2], color: 0x0000ff, size: [0.5, 0.5, 0.3] }, // IC
+                { pos: [-1, -1, 0.2], color: 0xff0000, size: [0.3, 0.3, 0.4] }, // Capacitor
+                { pos: [0, 0.5, 0.2], color: 0xffff00, size: [0.2, 0.8, 0.2] }  // Resistor
+            ];
+            
+            components.forEach(comp => {
+                const geometry = new THREE.BoxGeometry(...comp.size);
+                const material = new THREE.MeshBasicMaterial({ color: comp.color });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(...comp.pos);
+                scene.add(mesh);
+            });
+            
+            camera.position.z = 5;
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                pcb.rotation.x += 0.005;
+                pcb.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        // Interactive Circuit Designer
+        function initCircuitDesigner() {
+            const canvas = document.getElementById('circuit-canvas');
+            const components = [];
+            let selectedComponent = null;
+            let offsetX, offsetY;
+            
+            // Available components
+            const componentTypes = {
+                resistor: { icon: 'fa-bolt', color: '#ff914d' },
+                capacitor: { icon: 'fa-battery-three-quarters', color: '#2c5e9e' },
+                transistor: { icon: 'fa-microchip', color: '#4cb944' }
+            };
+            
+            // Add component buttons
+            document.querySelectorAll('.add-component').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const type = btn.dataset.type;
+                    addComponent(type, 100, 100);
+                });
+            });
+            
+            function addComponent(type, x, y) {
+                const comp = document.createElement('div');
+                comp.className = 'circuit-component floating';
+                comp.innerHTML = `
+                    <i class="fas ${componentTypes[type].icon}"></i>
+                    <div class="label">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                `;
+                comp.style.left = `${x}px`;
+                comp.style.top = `${y}px`;
+                comp.style.backgroundColor = componentTypes[type].color + '20';
+                comp.style.border = `2px solid ${componentTypes[type].color}`;
+                
+                // Drag functionality
+                comp.addEventListener('mousedown', startDrag);
+                canvas.appendChild(comp);
+                components.push({ element: comp, type, connections: [] });
+            }
+            
+            function startDrag(e) {
+                selectedComponent = this;
+                offsetX = e.clientX - selectedComponent.getBoundingClientRect().left;
+                offsetY = e.clientY - selectedComponent.getBoundingClientRect().top;
+                document.addEventListener('mousemove', dragComponent);
+                document.addEventListener('mouseup', stopDrag);
+            }
+            
+            function dragComponent(e) {
+                if (selectedComponent) {
+                    selectedComponent.style.left = `${e.clientX - offsetX - canvas.getBoundingClientRect().left}px`;
+                    selectedComponent.style.top = `${e.clientY - offsetY - canvas.getBoundingClientRect().top}px`;
+                }
+            }
+            
+            function stopDrag() {
+                document.removeEventListener('mousemove', dragComponent);
+                document.removeEventListener('mouseup', stopDrag);
+                selectedComponent = null;
+            }
+            
+            // Add some default components
+            addComponent('resistor', 150, 100);
+            addComponent('capacitor', 300, 200);
+            addComponent('transistor', 200, 300);
+        }
+
+        // IoT Dashboard
+        function initIoTSimulation() {
+            const chartDom = document.getElementById('power-consumption-chart');
+            const myChart = echarts.init(chartDom);
+            
+            // Simulate real-time data
+            let baseTime = new Date().getTime();
+            let data = [];
+            for (let i = 0; i < 100; i++) {
+                data.push([
+                    new Date(baseTime + i * 1000),
+                    Math.round(Math.random() * 1000 + 1500)
+                ]);
+            }
+            
+            // Update sensor values
+            function updateSensors() {
+                const voltage = (230 + Math.random() * 2 - 1).toFixed(1);
+                const current = (15 + Math.random() * 1 - 0.5).toFixed(1);
+                const power = (voltage * current / 1000).toFixed(2);
+                
+                document.getElementById('voltage').textContent = `${voltage} V`;
+                document.getElementById('current').textContent = `${current} A`;
+                document.getElementById('power').textContent = `${power} kW`;
+                
+                // Add new data point
+                baseTime += 1000;
+                data.shift();
+                data.push([
+                    new Date(baseTime),
+                    Math.round(power * 1000)
+                ]);
+                
+                updateChart();
+                
+                setTimeout(updateSensors, 1000);
+            }
+            
+            function updateChart() {
+                const option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: params => {
+                            const date = new Date(params[0].value[0]);
+                            return `
+                                ${date.toLocaleTimeString()}<br/>
+                                Power: ${params[0].value[1]} W
+                            `;
+                        }
+                    },
+                    xAxis: {
+                        type: 'time',
+                        boundaryGap: false
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: 'Power (W)'
+                    },
+                    series: [{
+                        data: data,
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: {
+                            color: '#4cb944'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(76, 185, 68, 0.5)' },
+                                { offset: 1, color: 'rgba(76, 185, 68, 0.1)' }
+                            ])
+                        }
+                    }]
+                };
+                myChart.setOption(option);
+            }
+            
+            updateSensors();
+            
+            // Handle resize
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        // Engineering Calculators
+        function initCalculators() {
+            // Ohm's Law Calculator
+            document.getElementById('calculate-ohm').addEventListener('click', function() {
+                const voltage = parseFloat(document.getElementById('voltage-input').value);
+                const current = parseFloat(document.getElementById('current-input').value);
+                
+                if (voltage && current) {
+                    const resistance = voltage / current;
+                    document.getElementById('ohm-result').innerHTML = `
+                        <strong>Resistance (R):</strong> ${resistance.toFixed(2)} Ω
+                    `;
+                }
+            });
+            
+            // Power Calculator
+            document.getElementById('calculate-power').addEventListener('click', function() {
+                const voltage = parseFloat(document.getElementById('power-voltage').value);
+                const current = parseFloat(document.getElementById('power-current').value);
+                
+                if (voltage && current) {
+                    const power = voltage * current;
+                    document.getElementById('power-result').innerHTML = `
+                        <strong>Power (P):</strong> ${power.toFixed(2)} W
+                    `;
+                }
+            });
+            
+            // Voltage Divider Calculator
+            document.getElementById('calculate-divider').addEventListener('click', function() {
+                const r1 = parseFloat(document.getElementById('r1-input').value);
+                const r2 = parseFloat(document.getElementById('r2-input').value);
+                const vin = parseFloat(document.getElementById('vin-input').value);
+                
+                if (r1 && r2 && vin) {
+                    const vout = vin * (r2 / (r1 + r2));
+                    document.getElementById('divider-result').innerHTML = `
+                        <strong>Vout:</strong> ${vout.toFixed(2)} V
+                    `;
+                }
+            });
+        }
+
+        // Initialize all components when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initPCBModel();
+            initCircuitDesigner();
+            initIoTSimulation();
+            initCalculators();
+            
+            // Animate project cards on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.project-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

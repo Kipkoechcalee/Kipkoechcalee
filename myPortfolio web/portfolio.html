@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kipkoech Caleb | Electrical Engineer</title>
+    
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="portfolio.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Additional inline CSS for critical animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .floating { animation: float 6s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar container">
+        <a href="mylogo.svg" class="nav-logo glow-text">ECK</a>
+        <div class="nav-menu">
+            <a href="/my about.html" class="nav-link">About</a>
+            <a href="myworks.html" class="nav-link">Projects</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero container">
+        <div class="hero-content">
+            <h1>Kipkoech Caleb</h1>
+            <h2 style="color: var(--secondary); font-weight: 500;">Electrical Engineer</h2>
+            <p>Specializing in power systems, renewable energy integration, and industrial automation.</p>
+            <a href="#projects" class="btn btn-primary">View My Work</a>
+        </div>
+        <img src="k2.jpeg" alt="Kipkoech Caleb" class="floating professional-headshot">
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container">
+        <div class="about-grid">
+            <div>
+                <h2>About Me</h2>
+                <p>Licensed electrical engineer with 5+ years of experience designing and optimizing power distribution systems. Passionate about sustainable energy solutions and smart grid technologies.</p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-primary download-btn">
+                        <i class="fas fa-file-pdf"></i> Download CV
+                    </a>
+                    <a href="#contact" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i> Contact Me
+                    </a>
+                </div>
+            </div>
+            <div class="certification-badge">
+                <i class="fas fa-certificate"></i>
+                <span>PE Certified</span>
+                <div class="badge-glow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Progress Bars -->
+    <section id="skills" class="container">
+        <h2>Technical Skills</h2>
+        <div class="skill-category">
+            <h3><i class="fas fa-bolt"></i> Power Systems</h3>
+            <div class="skill-bar" data-level="92">
+                <div class="skill-label">
+                    <span>Load Flow Analysis</span>
+                    <span class="skill-percent">0%</span>
+                </div>
+                <div class="skill-progress">
+                    <div class="skill-fill"></div>
+                </div>
+            </div>
+            <!-- Add more skills as needed -->
+        </div>
+    </section>
+
+    <!-- Advanced Project Gallery -->
+    <section id="projects" class="container gallery-section">
+        <h2>Engineering Portfolio</h2>
+        <div class="form-group">
+            <label>Project Type</label>
+            <select class="form-control">
+            <option>Power Systems</option>
+            <option>Renewable Energy</option>
+            <option>Industrial Automation</option>
+            </select>
+        </div>
+        
+        <div class="gallery-container">
+            <!-- Project 1 -->
+            <div class="gallery-item power" data-category="power">
+                <div class="image-wrapper">
+                    <img src="substatio.jpeg" alt="Substation Design">
+                    <div class="image-overlay">
+                        <h3>33/11kV Substation</h3>
+                        <p>Full protection system design</p>
+                        <div class="tech-tags">
+                            <span>ETAP</span>
+                            <span>AutoCAD</span>
+                        </div>
+                        <button class="view-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 2 -->
+            <div class="gallery-item renewable" data-category="renewable">
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d">
+                        <h3>10MW Solar Farm</h3>
+                        <p>PV system layout with battery storage</p>
+                        <div class="tech-tags">
+                            <span>PVsyst</span>
+                            <span>HOMER</span>
+                        </div>
+                        <button class="view-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox">
+        <span class="close-btn">&times;</span>
+        <img class="lightbox-content" src="" alt="">
+        <div class="caption"></div>
+        <div class="lightbox-nav">
+            <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="container">
+        <div class="contact-card">
+        <h2>Get In Touch</h2>
+        <form id="contact-form">
+            <!-- Name Field -->
+            <div class="form-group floating-label">
+            <input type="text" id="name" class="form-control" placeholder=" " required>
+            <label for="name">Your Name</label>
+            <div class="error-message">Please enter your name</div>
+            </div>
+            
+            <!-- Email Field -->
+            <div class="form-group floating-label">
+            <input type="email" id="email" class="form-control" placeholder=" " required>
+            <label for="email">Email Address</label>
+            <div class="error-message">Please enter a valid email</div>
+            </div>
+            
+            <!-- Message Field -->
+            <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" class="form-control" rows="5" required></textarea>
+            <div class="error-message">Please enter your message</div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="form-submit-btn">
+            <i class="fas fa-paper-plane"></i>Send Message
+            </button>
+            
+            
+            <!-- Success Message (Hidden by default) -->
+            <div class="form-success">
+            <i class="fas fa-check-circle"></i>
+            <p>Your message has been sent successfully!</p>
+            </div>
+        </form>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-researchgate"></i></a>
+            </div>
+            <p>&copy; <span id="year"></span> Kipkoech Caleb. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="portfolio.js"></script>
+    <script src="java.js"></script>
+    
+    <script>
+        // Current year for footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
