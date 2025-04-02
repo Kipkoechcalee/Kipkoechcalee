@@ -2,40 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Friendship Star Game</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-    <style>
-        body { margin: 0; }
-        canvas { display: block; }
-    </style>
-</head>
-<body>
-    <script>
-        // 🚀 Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-            projectId: "YOUR_PROJECT",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script type="module">
+        import { firebaseConfig } from "./config.js";  // Securely store Firebase keys
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        // 🎮 Game Configuration
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
         const config = {
             type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            scene: {
-                preload: preload,
-                create: create
-            }
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 800,
+                height: 600
+            },
+            scene: { preload, create }
         };
         const game = new Phaser.Game(config);
 
@@ -50,9 +36,9 @@
         ];
 
         function preload() {
-            this.load.image('background', 'https://source.unsplash.com/random/800x600?stars');
-            this.load.image('star', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/120px-Gold_Star.svg.png');
-            this.load.image('particle', 'https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg');
+            this.load.image('background', 'assets/background.webp');
+            this.load.image('star', 'assets/star.webp');
+            this.load.image('particle', 'assets/particle.webp');
         }
 
         function create() {
@@ -78,22 +64,13 @@
 
         function showTask(scene, message) {
             let bg = scene.add.rectangle(400, 300, 500, 200, 0x000000, 0.8);
-            let text = scene.add.text(220, 270, message, { fontSize: '20px', fill: '#fff' });
-
-            let shareButton = scene.add.text(320, 350, "📤 Share with Friends", { fontSize: '20px', fill: '#ff0' })
-                .setInteractive()
-                .on('pointerdown', () => {
-                    let shareText = encodeURIComponent(message);
-                    let shareUrl = `https://wa.me/?text=${shareText}`;
-                    window.open(shareUrl, "_blank");
-                });
+            let text = scene.add.text(220, 270, message, { fontSize: '20px', fill: '#fff', wordWrap: { width: 450 } });
 
             let closeButton = scene.add.text(360, 400, "❌ Close", { fontSize: '20px', fill: '#f00' })
                 .setInteractive()
                 .on('pointerdown', () => {
                     bg.destroy();
                     text.destroy();
-                    shareButton.destroy();
                     closeButton.destroy();
                 });
         }
@@ -101,38 +78,31 @@
         function showParticles(scene, x, y) {
             let particles = scene.add.particles('particle');
             let emitter = particles.createEmitter({
-                x: x,
-                y: y,
-                speed: { min: -100, max: 100 },
-                scale: { start: 0.5, end: 0 },
-                lifespan: 1000
+                x: x, y: y, speed: { min: -100, max: 100 },
+                scale: { start: 0.5, end: 0 }, lifespan: 1000
             });
-
             setTimeout(() => emitter.stop(), 1000);
         }
 
         function saveToLeaderboard(starNumber, task) {
             let playerName = prompt("Enter your name:");
             if (!playerName) return;
-            db.ref('leaderboard').push({
-                name: playerName,
-                star: starNumber,
-                task: task,
-                time: Date.now()
+            push(ref(db, 'leaderboard'), {
+                name: playerName, star: starNumber, task: task, time: Date.now()
             });
         }
 
         function showLeaderboard(scene) {
             let leaderboardText = scene.add.text(550, 50, "🏆 Leaderboard", { fontSize: '20px', fill: '#ff0' });
 
-            db.ref('leaderboard').limitToLast(5).on("value", (snapshot) => {
+            onValue(ref(db, 'leaderboard'), (snapshot) => {
                 let y = 80;
                 snapshot.forEach((childSnapshot) => {
                     let entry = childSnapshot.val();
                     scene.add.text(550, y, `${entry.name} ⭐ ${entry.star}`, { fontSize: '16px', fill: '#fff' });
                     y += 20;
                 });
-            });
+            }, { onlyOnce: false });
         }
     </script>
 </body>
